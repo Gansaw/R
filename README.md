@@ -22,7 +22,7 @@ Before operating program, you need to accomplish the following step.
 + random Forest
 + xgboost
 + prophet
-+ cluster
++ nbClust
 + lubridate
 
 ### License
