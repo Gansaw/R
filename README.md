@@ -3,9 +3,9 @@
 + This is a place where Choi Ho-jin, a 3rd-term K-Digital trainee at Pusan National University, uploads his work while studying R.
 
 ## Required
-+ [R] (https://cran.rstudio.com/) (4.3 ver)
-+ [R tools] (https://cran.r-project.org/bin/windows/Rtools/rtools43/rtools.html) (4.3 ver)
-+ [R Studio] (https://posit.co/download/rstudio-desktop/) (2023.06 ver)
++ [R](https://cran.rstudio.com/) (4.3 ver)
++ [R tools](https://cran.r-project.org/bin/windows/Rtools/rtools43/rtools.html) (4.3 ver)
++ [R Studio](https://posit.co/download/rstudio-desktop/) (2023.06 ver)
 
 ## Not required but recommended
-+ [D2 Coding Font] (https://github.com/naver/d2codingfont)
++ [D2 Coding Font](https://github.com/naver/d2codingfont)
