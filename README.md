@@ -23,6 +23,7 @@ Before operating program, you need to accomplish the following step.
 + xgboost
 + prophet
 + nbClust
++ cluster
 + lubridate
 
 ### License
