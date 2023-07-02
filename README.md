@@ -8,8 +8,6 @@ This is a place where Choi Ho-jin, a 3rd-term K-Digital trainee at Pusan Nationa
 
 Before operating program, you need to accomplish the following step.
 
-
-
 ### Prerequired
 + [R](https://cran.rstudio.com/) (4.3 ver)
 + [R tools](https://cran.r-project.org/bin/windows/Rtools/rtools43/rtools.html) (4.3 ver)
