@@ -1,5 +1,5 @@
 ---
-title: "Hypothesize and Cluster iris dataset by using R"
+title: "Hypothesize and Cluster Iris dataset by using R"
 author: "최호진(gansaw12@gmail.com)"
 date: "2023.07.10(월)"
 output:
@@ -33,14 +33,12 @@ output:
 install.packages("tidyverse")
 install.packages("NbClust")
 install.packages("cluster")
-install.packages("dplyr")
 ```
 
 ```R
 library(tidyverse)
 library(NbClust)
 library(cluster)
-library(dplyr)
 ```
 
 
@@ -116,7 +114,7 @@ df_zscore_iris <- as.data.frame(zscore_iris)
 df_zscore_iris %>% 
   pivot_longer(cols = all_of(vars), names_to = "variable", values_to = "value") %>%
   ggplot(aes(x = value)) +
-  geom_density(aes(fill = variable), alpha = 0.5) +
+  geom_density(aes(fill = variable), alpha = 0.05) +     # 유의수준(alpha) 5% 이내
   facet_wrap(~ variable, scales = "free") +
   labs(title = "Iris dataset by z-score normalization", x = "z-score", y = "density") +
   theme_bw()
@@ -210,7 +208,7 @@ library(NbClust)
 df_iris2 <- filtered_iris[,-5]
 
 # 랜덤으로 표본을 뽑는 규칙 설정 => 일관된 결과를 얻을 수 있다.
-set.seed(1000)
+set.seed(1234)
 nc2 <- NbClust(df_iris2, distance="euclidean", min.nc=3, max.nc=15, method="kmeans")
 ```
 
