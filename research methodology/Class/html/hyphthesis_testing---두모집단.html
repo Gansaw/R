@@ -12,7 +12,7 @@
 <meta name="author" content="최호진(gansaw12@gmail.com)" />
 
 
-<title>Association Analysis - Cross-Tabulation Analysis</title>
+<title>Hyphthesis Testing - Double Population</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -349,10 +349,9 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Association Analysis - Cross-Tabulation
-Analysis</h1>
+<h1 class="title toc-ignore">Hyphthesis Testing - Double Population</h1>
 <h4 class="author">최호진(<a href="mailto:gansaw12@gmail.com" class="email">gansaw12@gmail.com</a>)</h4>
-<h4 class="date">2023.09.25(월)</h4>
+<h4 class="date">2023.09.18(월)</h4>
 
 </div>
 
@@ -360,49 +359,113 @@ Analysis</h1>
 true
 </div>
 
+<p><br> <br></p>
+<div id="된장의-다이어트-효능" class="section level2">
+<h2>1. : 된장의 다이어트 효능</h2>
 <p><br></p>
-<div id="교차분석" class="section level2">
-<h2>교차분석</h2>
-<p>카이제곱(chi-square)검정을 사용하여 교차분석을 진행한다.</p>
+<p>바이오벤처 기업인 D사에서는 다이어트에 관해 괄목할만한 효과가 있는
+된장을 만들었다. 이러한 D사의 된장이 체중감량에 탁월한 효ㅕ과가 있는지
+검정하기 위하여 20명을 실험대상으로 선발하여 된장 섭취 전과 후의
+체중변화를 살펴보았다. 그 결과 평균 2.55kg이 감량되었을을 알 수 있었다.
+또한 감량 무게의 표준편차는 3.13으로 측정되었다. 이러한 표본조사 결과를
+이용하여 과연 D사의 된장이 다이어트 효과가 있다고 판단할 수 있는지를
+5%의 유의수준에서 검정해 보시오.</p>
 <p><br></p>
-<div id="직무만족도1" class="section level4">
-<h4>1. 직무만족도1</h4>
-<pre class="r"><code>raw &lt;- read.csv(&quot;https://www.dropbox.com/s/xg6z6a7t3ktr646/cross_table_1.csv?dl=1&quot;, header=F, col.names=c(&quot;학력&quot;,&quot;직무만족&quot;,&quot;연령분류&quot;,&quot;보수&quot;,&quot;대인관계&quot;))
-tab &lt;- xtabs(~학력+직무만족, data=raw)
-
-sum.i &lt;- apply(tab, 1, sum)
-sum.j &lt;- apply(tab, 2, sum)
-eij &lt;- outer(sum.i, sum.j)/sum(tab)
-
-chisq &lt;- sum((tab-eij)^2/eij)
-ni &lt;- length(sum.i); nj=length(sum.j)
-pval &lt;- pchisq(chisq, df=(ni-1)*(nj-1), lower.tail=F)
-
-chisq ; pval</code></pre>
-<pre><code>## [1] 14.52711</code></pre>
-<pre><code>## [1] 0.02427146</code></pre>
+<div id="평균과-표준편차가-주어진-경우" class="section level4">
+<h4>1. 평균과 표준편차가 주어진 경우</h4>
+<pre class="r"><code>n &lt;- 20; xdbar &lt;- 2.55; sigmad &lt;- 3.13
+t0 &lt;- xdbar/(sigmad/sqrt(n))
+pt(t0, df=n-1, lower.tail=F)</code></pre>
+<pre><code>## [1] 0.0008643976</code></pre>
+<p>p-value 값이 유의수준 5%보다 낮음 =&gt; 귀무가설 기각</p>
+<p><br></p>
 </div>
-<div id="직무만족도2" class="section level4">
-<h4>2. 직무만족도2</h4>
-<pre class="r"><code>chisq.test(tab)</code></pre>
+<div id="평균-표준편차가-주어지지-않고-표본만-주어진-경우" class="section level4">
+<h4>2. 평균, 표준편차가 주어지지 않고 표본만 주어진 경우</h4>
+<p>모집단 1 : before, 모집단 2 : after</p>
+<pre class="r"><code>before &lt;- c(82, 54, 74, 75, 71, 76, 70, 62, 77, 75, 72, 83, 78, 74, 68, 76, 75, 75, 75, 71)
+after &lt;- c(75, 50, 74, 71, 69, 73, 68, 62, 68, 72, 70, 77, 71, 74, 67, 73, 77, 71, 76, 74)
+t.test(before, after, paired=T, alt=&quot;greater&quot;)</code></pre>
 <pre><code>## 
-##  Pearson&#39;s Chi-squared test
+##  Paired t-test
 ## 
-## data:  tab
-## X-squared = 14.527, df = 6, p-value = 0.02427</code></pre>
+## data:  before and after
+## t = 3.6355, df = 19, p-value = 0.0008801
+## alternative hypothesis: true mean difference is greater than 0
+## 95 percent confidence interval:
+##  1.337172      Inf
+## sample estimates:
+## mean difference 
+##            2.55</code></pre>
+<p>p-value 값이 유의수준 5%보다 낮음 =&gt; 귀무가설 기각</p>
+<p><br></p>
 </div>
-<div id="여론조사" class="section level4">
-<h4>3. 여론조사</h4>
-<pre class="r"><code>정당 &lt;- c(48,29,19,35,59,19,22,15,18)
-tab &lt;- matrix(정당,3,3,byrow=T)
-colnames(tab) &lt;- c(&quot;남편A&quot;,&quot;남편B&quot;,&quot;남편C&quot;)
-rownames(tab) &lt;- c(&quot;아내A&quot;,&quot;아내B&quot;,&quot;아내C&quot;)
-chisq.test(tab)</code></pre>
+<div id="read.csv로-불러오기" class="section level4">
+<h4>3. read.csv로 불러오기</h4>
+<pre class="r"><code>diet &lt;- read.csv(&quot;https://www.dropbox.com/s/anylurmkgmhqiuk/diet.csv?dl=1&quot;, header=F, col.names=c(&quot;id&quot;, &quot;before&quot;, &quot;after&quot;))
+t.test(diet$before, diet$after, paired=T, alt=&quot;greater&quot;)</code></pre>
 <pre><code>## 
-##  Pearson&#39;s Chi-squared test
+##  Paired t-test
 ## 
-## data:  tab
-## X-squared = 18.182, df = 4, p-value = 0.001137</code></pre>
+## data:  diet$before and diet$after
+## t = 3.6355, df = 19, p-value = 0.0008801
+## alternative hypothesis: true mean difference is greater than 0
+## 95 percent confidence interval:
+##  1.337172      Inf
+## sample estimates:
+## mean difference 
+##            2.55</code></pre>
+<p>p-value 값이 유의수준 5%보다 낮음 =&gt; 귀무가설 기각</p>
+<p><br> <br></p>
+</div>
+</div>
+<div id="타이어-평균수명" class="section level2">
+<h2>2. 타이어 평균수명</h2>
+<p><br></p>
+<p>A회사의 타이어와 B회사의 타이어 평균수명에 차이가 있는지를 검정하기
+위하여 각 회사의 제품을 무작위로 30개씩 표본으로 추출하여 조사하였다
+.표본조사 결과 A사에서 생산한 타이어의 평균수명은 48,500km이고
+표준편차는 3,600km이다. 반면에 B사에서 생산한 타이어의 평균수명은
+52,000km이고 표준편차는 4,200km이었다. 두 타이어 회사의 분산이 다르다는
+전제하에서 유의수준(a)을 0.05로 하여 두 회사 타이어의 평균수명에 차이가
+있는지를 검정하시오.</p>
+<p><br></p>
+<div id="var.test적절하지-않은-방법" class="section level4">
+<h4>1. var.test(적절하지 않은 방법)</h4>
+<p>문제에서는 분산이 다르다는 전제를 하였지만 var.test는 등분산성을
+조건으로 한다.</p>
+<pre class="r"><code>tire &lt;- read.csv(&quot;https://www.dropbox.com/s/d40dcuescate4nq/tire.csv?dl=1&quot;, header=F, col.names=c(&quot;id&quot;, &quot;span&quot;))
+var.test(tire[tire$id==1,2], tire[tire$id==2,2])</code></pre>
+<pre><code>## 
+##  F test to compare two variances
+## 
+## data:  tire[tire$id == 1, 2] and tire[tire$id == 2, 2]
+## F = 0.73845, num df = 29, denom df = 29, p-value = 0.4192
+## alternative hypothesis: true ratio of variances is not equal to 1
+## 95 percent confidence interval:
+##  0.3514742 1.5514716
+## sample estimates:
+## ratio of variances 
+##          0.7384458</code></pre>
+<p><br></p>
+</div>
+<div id="t.test적절한-방법" class="section level4">
+<h4>2. t.test(적절한 방법)</h4>
+<p>var.equal = F를 통해 분산이 다르다는 전제를 하였다. 등분산성을 전제로
+한다면 var.equal = T로 하면 된다.</p>
+<pre class="r"><code>t.test(tire[tire$id==1,2], tire[tire$id==2,2], var.equal=F)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  tire[tire$id == 1, 2] and tire[tire$id == 2, 2]
+## t = -2.679, df = 56.716, p-value = 0.009646
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -4730.6728  -683.3939
+## sample estimates:
+## mean of x mean of y 
+##  48670.57  51377.60</code></pre>
+<p>p-value 값이 유의수준 5%보다 낮음 =&gt; 귀무가설 기각</p>
 </div>
 </div>
 

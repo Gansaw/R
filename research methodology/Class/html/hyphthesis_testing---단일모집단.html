@@ -12,7 +12,7 @@
 <meta name="author" content="최호진(gansaw12@gmail.com)" />
 
 
-<title>Hyphthesis Testing - Population Variance</title>
+<title>Hyphthesis Testing - Single Population</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -349,8 +349,7 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Hyphthesis Testing - Population
-Variance</h1>
+<h1 class="title toc-ignore">Hyphthesis Testing - Single Population</h1>
 <h4 class="author">최호진(<a href="mailto:gansaw12@gmail.com" class="email">gansaw12@gmail.com</a>)</h4>
 <h4 class="date">2023.09.18(월)</h4>
 
@@ -360,45 +359,119 @@ Variance</h1>
 true
 </div>
 
+<p><br> <br></p>
+<div id="슈퍼-건건지-수명" class="section level2">
+<h2>1. 슈퍼 건건지 수명</h2>
 <p><br></p>
-<div id="모분산-예제-1-화랑-담배" class="section level2">
-<h2>모분산 예제 1 : 화랑 담배</h2>
-<p>전매청에서 제조하는 화랑담배에 포함되어 있는 니코틴은 분산이
-1.2mg^2이라고 알려져 있다. 그러나 생산되는 시기에 따라 담배에 포함되어
-있는 니코틴 함유량이 담배마다 서로 크게 다른 것 같다는 소비자들의 불만이
-많아, 소비자 단체에서는 일주일 동안 생산된 화랑담배 중에서 임의로 30개를
-표본으로 추출한 결과 니코틴의 분산은 1.7mg^2으로 측정되었다. 이러한
-결과를 바탕으로 조사하여 5%를 유의수준(a)으로 하여 분산에 대한
-가설검정을 실시해 보시오.</p>
-<div id="분산-가설검정-카이제곱-검정" class="section level3">
-<h3>분산 가설검정 (카이제곱 검정)</h3>
-<pre class="r"><code>x &lt;- c(11.5, 9.9, 12.3, 11.2, 13.8, 12.3, 11.9, 12.3, 12.9, 15.6, 13.2, 11.9, 12.8, 13.8, 11.5, 12.4, 12.3, 12.3, 10.5, 12.3, 12.7, 12.8, 13.2, 14.9, 9.8, 12.3, 14.2, 11.9, 14.2, 13.6)
-n &lt;- length(x); s &lt;- sd(x); sigma0 &lt;- sqrt(1.2)
-chisq &lt;- (n-1)*s^2/sigma0^2
-
-chisq ; 2*(1-pchisq(chisq, df=n-1))</code></pre>
-<pre><code>## [1] 41.79472</code></pre>
-<pre><code>## [1] 0.1171781</code></pre>
-<p>p-value 값이 유의수준 5%보다 낮음 =&gt; 귀무가설 채택(생산 시기와
-니코틴 함유량은 서로 관계가 없다.)</p>
+<p>S전자는 지사가 생산하는 슈퍼 건전지의 평균 수명이 1500분이라고
+주장하고 있다 그러나 이를 사용해본 소비자들은 1500분이 되지 않는다고
+불평하여 이를 소비자 보호원에서 밝혀줄 것을 호소하였다. 이에 따라
+소비자보호원에서는 100개의 건전지를 표본으로 뽑아 조사를 실시하였다.
+조사 결과 표본 100개의 평균 수명은 1,420분이고 표본의 표준편차는
+200분이었다. 소비자의 주장을 유의수준(a) 0.05에서 검정하시오.</p>
+<p><br></p>
+<pre class="r"><code>n &lt;- 100; xbar &lt;- 1420; sigma &lt;- 200; mu &lt;- 1500
+t0 &lt;- (xbar-mu)/(sigma/sqrt(n))
+pt(t0, df=n-1)      # p-value 값</code></pre>
+<pre><code>## [1] 6.112576e-05</code></pre>
+<p>=&gt; p-value값이 유의수준 0.5보다 작으므로 귀무가설 기각(연구가설
+채택)</p>
+<p><br> <br></p>
 </div>
-<div id="예제-2-수학영어-점수" class="section level3">
-<h3>예제 2 : 수학,영어 점수</h3>
-<pre class="r"><code>score &lt;- read.csv(&quot;https://www.dropbox.com/s/o8m92fqjhbudrb7/score.csv?dl=1&quot;, header=F, col.names=c(&quot;math&quot;, &quot;eng&quot;))
-var.test(score$math, score$eng)</code></pre>
+<div id="통조림-무게" class="section level2">
+<h2>2. 통조림 무게</h2>
+<p><br></p>
+<ul>
+<li>귀무가설(H0) : 통조림의 무게는 300g이 아니다.</li>
+<li>연구가설(H1) : 통조림의 무게는 300g이다.</li>
+</ul>
+<p><br></p>
+<div id="검정통계량표본평균이-294g이고-표본분산이-400g이라고-주어진-경우" class="section level4">
+<h4>1. 검정통계량(표본평균)이 294g이고 표본분산이 400g이라고 주어진
+경우</h4>
+<pre class="r"><code>n &lt;- 100; xbar &lt;- 294; sigma &lt;- sqrt(400); mu &lt;- 300
+t0 &lt;- (xbar-mu)/(sigma/sqrt(n))
+pt(t0, df=n-1) + pt(-t0, df=n-1, lower.tail=F)      # p-value 값</code></pre>
+<pre><code>## [1] 0.003415508</code></pre>
+<pre class="r"><code>2*pt(t0, df=n-1)      # p-value 값</code></pre>
+<pre><code>## [1] 0.003415508</code></pre>
+<p><br> <br></p>
+</div>
+<div id="통조림-무게-표본이-주어진-경우" class="section level4">
+<h4>2. 통조림 무게 표본이 주어진 경우</h4>
+<pre class="r"><code>x &lt;- c(319, 242, 291, 276, 348, 299, 293, 304, 296, 286, 301, 324, 279, 323, 296, 271, 283, 302, 321, 322, 307, 300, 261, 274, 311, 320, 290, 269, 326, 287, 292, 294, 314, 303, 290, 292, 308, 308, 282, 285, 301, 327, 323, 320, 301, 288, 293, 310, 301, 303, 291, 304, 244, 305, 285, 316, 278, 290, 283, 261, 320, 293, 307, 307, 260, 318, 293, 309, 308, 306, 283, 300, 263, 311, 286, 272, 313, 312, 286, 282, 309, 284, 321, 251, 319, 311, 271, 295, 280, 293, 320, 256, 318, 281, 271, 283, 277, 289, 266, 309) </code></pre>
+<p>t.test를 통해 가설검정을 진행한다.</p>
+<p><br></p>
+<div id="통조림-무게가-300g이라는-주장" class="section level5">
+<h5>2-1. 통조림 무게가 300g이라는 주장</h5>
+<pre class="r"><code>t.test(x, mu=300)</code></pre>
 <pre><code>## 
-##  F test to compare two variances
+##  One Sample t-test
 ## 
-## data:  score$math and score$eng
-## F = 1.4945, num df = 39, denom df = 54, p-value = 0.1705
-## alternative hypothesis: true ratio of variances is not equal to 1
+## data:  x
+## t = -2.2658, df = 99, p-value = 0.02564
+## alternative hypothesis: true mean is not equal to 300
 ## 95 percent confidence interval:
-##  0.8402397 2.7345017
+##  291.4842 299.4358
 ## sample estimates:
-## ratio of variances 
-##           1.494469</code></pre>
-<p>p-value 값이 유의수준 5%보다 낮음 =&gt; 귀무가설 채택(수학,영어
-성적은 서로 관계가 없다.)</p>
+## mean of x 
+##    295.46</code></pre>
+<p><br></p>
+</div>
+<div id="통조림-무게가-300g보다-작다는-주장" class="section level5">
+<h5>2-2. 통조림 무게가 300g보다 작다는 주장</h5>
+<pre class="r"><code>t.test(x, mu=300, alt=&quot;less&quot;)</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  x
+## t = -2.2658, df = 99, p-value = 0.01282
+## alternative hypothesis: true mean is less than 300
+## 95 percent confidence interval:
+##      -Inf 298.7869
+## sample estimates:
+## mean of x 
+##    295.46</code></pre>
+<p><br> <br></p>
+</div>
+</div>
+<div id="read.csv로-읽어오는-경우" class="section level4">
+<h4>3. read.csv로 읽어오는 경우</h4>
+<pre class="r"><code>getwd()   # get currently working directory</code></pre>
+<pre><code>## [1] &quot;C:/Users/user/Desktop/github/R/research methodology/Class&quot;</code></pre>
+<pre class="r"><code>x &lt;- read.csv(&quot;https://www.dropbox.com/s/gvvbp2n45r6wqyh/tuna_can.csv?dl=1&quot;, header=F, col.names = c(&quot;id&quot;, &quot;weight&quot;))</code></pre>
+<p><br></p>
+<div id="통조림-무게가-300g이라는-주장-1" class="section level5">
+<h5>3-1. 통조림 무게가 300g이라는 주장</h5>
+<pre class="r"><code>t.test(x$weight, mu=300)</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  x$weight
+## t = -2.2658, df = 99, p-value = 0.02564
+## alternative hypothesis: true mean is not equal to 300
+## 95 percent confidence interval:
+##  291.4842 299.4358
+## sample estimates:
+## mean of x 
+##    295.46</code></pre>
+<p><br></p>
+</div>
+<div id="통조림-무게가-300g보다-작다는-주장-1" class="section level5">
+<h5>3-2. 통조림 무게가 300g보다 작다는 주장</h5>
+<pre class="r"><code>t.test(x$weight, mu=300, alt=&quot;less&quot;)</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  x$weight
+## t = -2.2658, df = 99, p-value = 0.01282
+## alternative hypothesis: true mean is less than 300
+## 95 percent confidence interval:
+##      -Inf 298.7869
+## sample estimates:
+## mean of x 
+##    295.46</code></pre>
+</div>
 </div>
 </div>
 

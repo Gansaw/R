@@ -1,0 +1,140 @@
+---
+title: "ANOVA - Analysis of Variance"
+author: "최호진(gansaw12@gmail.com)"
+date: "2023.09.25(월)"
+output:
+  html_document:
+  toc: yes
+df_print: paged
+word_document:
+  toc: yes
+pdf_document:
+  extra_dependencies: kotex
+fig_height: 6
+fig_width: 10
+toc: yes
+fig_caption: yes
+number_sections: yes
+---
+
+<br>
+<br>
+
+
+## 1. 일원분산분석
+
+<br>
+
+#### 1. 식당1
+```{R}
+restaurant <- read.csv("https://www.dropbox.com/s/fbyroeo28wgn1pz/restaurant.csv?dl=1", header=F, col.names=c("id", "name", "score"))
+lm.restaurant <- lm(score ~ factor(name), data=restaurant)
+anova(lm.restaurant)
+```
+
+<br>
+
+#### 2. 식당2
+```{r : restaurant2}
+# if name is not a factor type, it will produce wrong results (see the df)
+aov.restaurant <- aov(score ~ factor(name), data=restaurant)
+summary(aov.restaurant)
+```
+
+<br>
+
+#### 3. 사후분석
+
+##### 3-1. LSD
+```{r : LSD}
+library(agricolae, warn.conflicts=F)
+l.test <- LSD.test(aov.restaurant, "factor(name)")
+
+l.test
+```
+##### 3-2. Scheffe
+```{R}
+(scheffe.test(aov.restaurant, "factor(name)"))
+```
+##### 3-3. Duncan
+```{R}
+(duncan.test(aov.restaurant, "factor(name)"))
+```
+
+<br>
+<br>
+
+## 2. 이원분산분석 : 주효과
+
+<br>
+
+#### 1. 창고1
+```{r : store_main1}
+store.main <- read.csv("https://www.dropbox.com/s/oo0rrzhvmk3rmvm/store_main.csv?dl=1", header=F, col.names=c("size","loc","sales"))
+lm.store.main <- lm(sales ~ factor(size)+factor(loc), data=store.main)
+anova(lm.store.main)
+```
+
+<br>
+
+#### 2. 창고2
+```{r : store_main2}
+aov.store.main <- aov(sales ~ factor(size)+factor(loc), data=store.main)
+summary(aov.store.main)
+```
+
+<br>
+
+#### 3. 사후분석
+
+##### 3-1. LSD
+```{R}
+(LSD.test(aov.store.main, "factor(size)"))
+```
+##### 3-2. Scheffe
+```{R}
+(scheffe.test(aov.store.main, "factor(size)"))
+```
+##### 3-3. Duncan
+```{R}
+(duncan.test(aov.store.main, "factor(size)"))
+```
+
+<br>
+<br>
+
+## 3. 이원분산분석 : 주효과와 상호작용효과
+
+<br>
+
+#### 1. 창고1
+```{r : store_interaction1}
+store.inter <- read.csv("https://www.dropbox.com/s/wnnrtgyt6oqhoti/store_interaction.csv?dl=1", header=F, col.names=c("size","loc","sales"))
+lm.store.inter <- lm(sales ~ factor(size)*factor(loc), data=store.inter)
+anova(lm.store.inter)
+```
+
+<br>
+
+#### 2. 창고2
+```{r : store_interaction2}
+aov.store.inter <- aov(sales ~ factor(size)*factor(loc), data=store.inter)
+summary(aov.store.inter)
+```
+
+<br>
+
+#### 3. 사후분석
+
+##### 3-1. LSD
+```{R}
+(LSD.test(aov.store.inter, "factor(size)"))
+```
+##### 3-2. Scheffe
+```{R}
+(scheffe.test(aov.store.inter, "factor(size)"))
+```
+##### 3-3. Duncan
+```{R}
+(duncan.test(aov.store.inter, "factor(size)"))
+```

@@ -12,7 +12,7 @@
 <meta name="author" content="최호진(gansaw12@gmail.com)" />
 
 
-<title>Hyphthesis Testing - Double Population</title>
+<title>ANOVA - Analysis of Variance</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -349,9 +349,9 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Hyphthesis Testing - Double Population</h1>
+<h1 class="title toc-ignore">ANOVA - Analysis of Variance</h1>
 <h4 class="author">최호진(<a href="mailto:gansaw12@gmail.com" class="email">gansaw12@gmail.com</a>)</h4>
-<h4 class="date">2023.09.18(월)</h4>
+<h4 class="date">2023.09.25(월)</h4>
 
 </div>
 
@@ -359,106 +359,394 @@ display: none;
 true
 </div>
 
+<p><br> <br></p>
+<div id="일원분산분석" class="section level2">
+<h2>1. 일원분산분석</h2>
 <p><br></p>
-<div id="예제-1-된장의-다이어트-효능" class="section level2">
-<h2>예제 1 : 된장의 다이어트 효능</h2>
-<p>바이오벤처 기업인 D사에서는 다이어트에 관해 괄목할만한 효과가 있는
-된장을 만들었다. 이러한 D사의 된장이 체중감량에 탁월한 효ㅕ과가 있는지
-검정하기 위하여 20명을 실험대상으로 선발하여 된장 섭취 전과 후의
-체중변화를 살펴보았다. 그 결과 평균 2.55kg이 감량되었을을 알 수 있었다.
-또한 감량 무게의 표준편차는 3.13으로 측정되었다. 이러한 표본조사 결과를
-이용하여 과연 D사의 된장이 다이어트 효과가 있다고 판단할 수 있는지를
-5%의 유의수준에서 검정해 보시오.</p>
-<div id="평균과-표준편차가-주어진-경우" class="section level3">
-<h3>1. 평균과 표준편차가 주어진 경우</h3>
-<pre class="r"><code>n &lt;- 20; xdbar &lt;- 2.55; sigmad &lt;- 3.13
-t0 &lt;- xdbar/(sigmad/sqrt(n))
-pt(t0, df=n-1, lower.tail=F)</code></pre>
-<pre><code>## [1] 0.0008643976</code></pre>
-<p>p-value 값이 유의수준 5%보다 낮음 =&gt; 귀무가설 기각</p>
-</div>
-<div id="평균-표준편차가-주어지지-않고-표본만-주어진-경우" class="section level3">
-<h3>2. 평균, 표준편차가 주어지지 않고 표본만 주어진 경우</h3>
-<p>모집단 1 : before, 모집단 2 : after</p>
-<pre class="r"><code>before &lt;- c(82, 54, 74, 75, 71, 76, 70, 62, 77, 75, 72, 83, 78, 74, 68, 76, 75, 75, 75, 71)
-after &lt;- c(75, 50, 74, 71, 69, 73, 68, 62, 68, 72, 70, 77, 71, 74, 67, 73, 77, 71, 76, 74)
-t.test(before, after, paired=T, alt=&quot;greater&quot;)</code></pre>
-<pre><code>## 
-##  Paired t-test
+<div id="식당1" class="section level4">
+<h4>1. 식당1</h4>
+<pre class="r"><code>restaurant &lt;- read.csv(&quot;https://www.dropbox.com/s/fbyroeo28wgn1pz/restaurant.csv?dl=1&quot;, header=F, col.names=c(&quot;id&quot;, &quot;name&quot;, &quot;score&quot;))
+lm.restaurant &lt;- lm(score ~ factor(name), data=restaurant)
+anova(lm.restaurant)</code></pre>
+<pre><code>## Analysis of Variance Table
 ## 
-## data:  before and after
-## t = 3.6355, df = 19, p-value = 0.0008801
-## alternative hypothesis: true mean difference is greater than 0
-## 95 percent confidence interval:
-##  1.337172      Inf
-## sample estimates:
-## mean difference 
-##            2.55</code></pre>
-<p>p-value 값이 유의수준 5%보다 낮음 =&gt; 귀무가설 기각</p>
-</div>
-<div id="read.csv로-불러오기" class="section level3">
-<h3>3. read.csv로 불러오기</h3>
-<pre class="r"><code>diet &lt;- read.csv(&quot;https://www.dropbox.com/s/anylurmkgmhqiuk/diet.csv?dl=1&quot;, header=F, col.names=c(&quot;id&quot;, &quot;before&quot;, &quot;after&quot;))
-t.test(diet$before, diet$after, paired=T, alt=&quot;greater&quot;)</code></pre>
-<pre><code>## 
-##  Paired t-test
-## 
-## data:  diet$before and diet$after
-## t = 3.6355, df = 19, p-value = 0.0008801
-## alternative hypothesis: true mean difference is greater than 0
-## 95 percent confidence interval:
-##  1.337172      Inf
-## sample estimates:
-## mean difference 
-##            2.55</code></pre>
-<p>p-value 값이 유의수준 5%보다 낮음 =&gt; 귀무가설 기각</p>
+## Response: score
+##               Df  Sum Sq Mean Sq F value   Pr(&gt;F)   
+## factor(name)   3   9.214 3.07147  3.9636 0.009579 **
+## Residuals    135 104.613 0.77491                    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p><br></p>
 </div>
+<div id="식당2" class="section level4">
+<h4>2. 식당2</h4>
+<pre class="r"><code># if name is not a factor type, it will produce wrong results (see the df)
+aov.restaurant &lt;- aov(score ~ factor(name), data=restaurant)
+summary(aov.restaurant)</code></pre>
+<pre><code>##               Df Sum Sq Mean Sq F value  Pr(&gt;F)   
+## factor(name)   3   9.21  3.0715   3.964 0.00958 **
+## Residuals    135 104.61  0.7749                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><br></p>
 </div>
-<div id="예제-2-타이어-평균수명" class="section level2">
-<h2>예제 2 : 타이어 평균수명</h2>
-<p>A회사의 타이어와 B회사의 타이어 평균수명에 차이가 있는지를 검정하기
-위하여 각 회사의 제품을 무작위로 30개씩 표본으로 추출하여 조사하였다
-.표본조사 결과 A사에서 생산한 타이어의 평균수명은 48,500km이고
-표준편차는 3,600km이다. 반면에 B사에서 생산한 타이어의 평균수명은
-52,000km이고 표준편차는 4,200km이었다. 두 타이어 회사의 분산이 다르다는
-전제하에서 유의수준(a)을 0.05로 하여 두 회사 타이어의 평균수명에 차이가
-있는지를 검정하시오.</p>
-<div id="var.test적절하지-않은-방법" class="section level3">
-<h3>1. var.test(적절하지 않은 방법)</h3>
-<p>문제에서는 분산이 다르다는 전제를 하였지만 var.test는 등분산성을
-조건으로 한다.</p>
-<pre class="r"><code>tire &lt;- read.csv(&quot;https://www.dropbox.com/s/d40dcuescate4nq/tire.csv?dl=1&quot;, header=F, col.names=c(&quot;id&quot;, &quot;span&quot;))
-var.test(tire[tire$id==1,2], tire[tire$id==2,2])</code></pre>
-<pre><code>## 
-##  F test to compare two variances
+<div id="사후분석" class="section level4">
+<h4>3. 사후분석</h4>
+<div id="lsd" class="section level5">
+<h5>3-1. LSD</h5>
+<pre class="r"><code>library(agricolae, warn.conflicts=F)
+l.test &lt;- LSD.test(aov.restaurant, &quot;factor(name)&quot;)
+
+l.test</code></pre>
+<pre><code>## $statistics
+##     MSerror  Df     Mean       CV
+##   0.7749105 135 4.151079 21.20629
 ## 
-## data:  tire[tire$id == 1, 2] and tire[tire$id == 2, 2]
-## F = 0.73845, num df = 29, denom df = 29, p-value = 0.4192
-## alternative hypothesis: true ratio of variances is not equal to 1
-## 95 percent confidence interval:
-##  0.3514742 1.5514716
-## sample estimates:
-## ratio of variances 
-##          0.7384458</code></pre>
+## $parameters
+##         test p.ajusted       name.t ntr alpha
+##   Fisher-LSD      none factor(name)   4  0.05
+## 
+## $means
+##      score       std  r        se      LCL      UCL Min Max Q25 Q50  Q75
+## 1 4.394737 0.7547856 38 0.1428019 4.112319 4.677155   2   5   4   5 5.00
+## 2 4.312500 0.6927039 32 0.1556148 4.004742 4.620258   3   5   4   4 5.00
+## 3 3.700000 1.0875471 30 0.1607182 3.382149 4.017851   1   5   3   4 4.75
+## 4 4.128205 0.9508857 39 0.1409592 3.849431 4.406979   1   5   4   4 5.00
+## 
+## $comparison
+## NULL
+## 
+## $groups
+##      score groups
+## 1 4.394737      a
+## 2 4.312500      a
+## 4 4.128205      a
+## 3 3.700000      b
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;group&quot;</code></pre>
 </div>
-<div id="t.test적절한-방법" class="section level3">
-<h3>2. t.test(적절한 방법)</h3>
-<p>var.equal = F를 통해 분산이 다르다는 전제를 하였다. 등분산성을 전제로
-한다면 var.equal = T로 하면 된다.</p>
-<pre class="r"><code>t.test(tire[tire$id==1,2], tire[tire$id==2,2], var.equal=F)</code></pre>
-<pre><code>## 
-##  Welch Two Sample t-test
+<div id="scheffe" class="section level5">
+<h5>3-2. Scheffe</h5>
+<pre class="r"><code>(scheffe.test(aov.restaurant, &quot;factor(name)&quot;))</code></pre>
+<pre><code>## $statistics
+##     MSerror  Df        F     Mean       CV
+##   0.7749105 135 2.671676 4.151079 21.20629
 ## 
-## data:  tire[tire$id == 1, 2] and tire[tire$id == 2, 2]
-## t = -2.679, df = 56.716, p-value = 0.009646
-## alternative hypothesis: true difference in means is not equal to 0
-## 95 percent confidence interval:
-##  -4730.6728  -683.3939
-## sample estimates:
-## mean of x mean of y 
-##  48670.57  51377.60</code></pre>
-<p>p-value 값이 유의수준 5%보다 낮음 =&gt; 귀무가설 기각</p>
+## $parameters
+##      test       name.t ntr alpha
+##   Scheffe factor(name)   4  0.05
+## 
+## $means
+##      score       std  r        se Min Max Q25 Q50  Q75
+## 1 4.394737 0.7547856 38 0.1428019   2   5   4   5 5.00
+## 2 4.312500 0.6927039 32 0.1556148   3   5   4   4 5.00
+## 3 3.700000 1.0875471 30 0.1607182   1   5   3   4 4.75
+## 4 4.128205 0.9508857 39 0.1409592   1   5   4   4 5.00
+## 
+## $comparison
+## NULL
+## 
+## $groups
+##      score groups
+## 1 4.394737      a
+## 2 4.312500     ab
+## 4 4.128205     ab
+## 3 3.700000      b
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;group&quot;</code></pre>
+</div>
+<div id="duncan" class="section level5">
+<h5>3-3. Duncan</h5>
+<pre class="r"><code>(duncan.test(aov.restaurant, &quot;factor(name)&quot;))</code></pre>
+<pre><code>## $statistics
+##     MSerror  Df     Mean       CV
+##   0.7749105 135 4.151079 21.20629
+## 
+## $parameters
+##     test       name.t ntr alpha
+##   Duncan factor(name)   4  0.05
+## 
+## $duncan
+## NULL
+## 
+## $means
+##      score       std  r        se Min Max Q25 Q50  Q75
+## 1 4.394737 0.7547856 38 0.1428019   2   5   4   5 5.00
+## 2 4.312500 0.6927039 32 0.1556148   3   5   4   4 5.00
+## 3 3.700000 1.0875471 30 0.1607182   1   5   3   4 4.75
+## 4 4.128205 0.9508857 39 0.1409592   1   5   4   4 5.00
+## 
+## $comparison
+## NULL
+## 
+## $groups
+##      score groups
+## 1 4.394737      a
+## 2 4.312500      a
+## 4 4.128205      a
+## 3 3.700000      b
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;group&quot;</code></pre>
+<p><br> <br></p>
+</div>
+</div>
+</div>
+<div id="이원분산분석-주효과" class="section level2">
+<h2>2. 이원분산분석 : 주효과</h2>
+<p><br></p>
+<div id="창고1" class="section level4">
+<h4>1. 창고1</h4>
+<pre class="r"><code>store.main &lt;- read.csv(&quot;https://www.dropbox.com/s/oo0rrzhvmk3rmvm/store_main.csv?dl=1&quot;, header=F, col.names=c(&quot;size&quot;,&quot;loc&quot;,&quot;sales&quot;))
+lm.store.main &lt;- lm(sales ~ factor(size)+factor(loc), data=store.main)
+anova(lm.store.main)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: sales
+##              Df Sum Sq Mean Sq F value  Pr(&gt;F)  
+## factor(size)  2 36.000 18.0000   27.00 0.03571 *
+## factor(loc)   1 20.167 20.1667   30.25 0.03150 *
+## Residuals     2  1.333  0.6667                  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><br></p>
+</div>
+<div id="창고2" class="section level4">
+<h4>2. 창고2</h4>
+<pre class="r"><code>aov.store.main &lt;- aov(sales ~ factor(size)+factor(loc), data=store.main)
+summary(aov.store.main)</code></pre>
+<pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)  
+## factor(size)  2  36.00  18.000   27.00 0.0357 *
+## factor(loc)   1  20.17  20.167   30.25 0.0315 *
+## Residuals     2   1.33   0.667                 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><br></p>
+</div>
+<div id="사후분석-1" class="section level4">
+<h4>3. 사후분석</h4>
+<div id="lsd-1" class="section level5">
+<h5>3-1. LSD</h5>
+<pre class="r"><code>(LSD.test(aov.store.main, &quot;factor(size)&quot;))</code></pre>
+<pre><code>## $statistics
+##     MSerror Df Mean       CV  t.value      LSD
+##   0.6666667  2  5.5 14.84539 4.302653 3.513101
+## 
+## $parameters
+##         test p.ajusted       name.t ntr alpha
+##   Fisher-LSD      none factor(size)   3  0.05
+## 
+## $means
+##   sales      std r        se        LCL       UCL Min Max  Q25 Q50  Q75
+## 1   8.5 2.121320 2 0.5773503 6.01586229 10.984138   7  10 7.75 8.5 9.25
+## 2   5.5 3.535534 2 0.5773503 3.01586229  7.984138   3   8 4.25 5.5 6.75
+## 3   2.5 2.121320 2 0.5773503 0.01586229  4.984138   1   4 1.75 2.5 3.25
+## 
+## $comparison
+## NULL
+## 
+## $groups
+##   sales groups
+## 1   8.5      a
+## 2   5.5     ab
+## 3   2.5      b
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;group&quot;</code></pre>
+</div>
+<div id="scheffe-1" class="section level5">
+<h5>3-2. Scheffe</h5>
+<pre class="r"><code>(scheffe.test(aov.store.main, &quot;factor(size)&quot;))</code></pre>
+<pre><code>## $statistics
+##     MSerror Df  F Mean       CV  Scheffe CriticalDifference
+##   0.6666667  2 19  5.5 14.84539 6.164414           5.033223
+## 
+## $parameters
+##      test       name.t ntr alpha
+##   Scheffe factor(size)   3  0.05
+## 
+## $means
+##   sales      std r        se Min Max  Q25 Q50  Q75
+## 1   8.5 2.121320 2 0.5773503   7  10 7.75 8.5 9.25
+## 2   5.5 3.535534 2 0.5773503   3   8 4.25 5.5 6.75
+## 3   2.5 2.121320 2 0.5773503   1   4 1.75 2.5 3.25
+## 
+## $comparison
+## NULL
+## 
+## $groups
+##   sales groups
+## 1   8.5      a
+## 2   5.5     ab
+## 3   2.5      b
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;group&quot;</code></pre>
+</div>
+<div id="duncan-1" class="section level5">
+<h5>3-3. Duncan</h5>
+<pre class="r"><code>(duncan.test(aov.store.main, &quot;factor(size)&quot;))</code></pre>
+<pre><code>## $statistics
+##     MSerror Df Mean       CV
+##   0.6666667  2  5.5 14.84539
+## 
+## $parameters
+##     test       name.t ntr alpha
+##   Duncan factor(size)   3  0.05
+## 
+## $duncan
+##      Table CriticalRange
+## 2 6.079637      3.510080
+## 3 5.813787      3.356592
+## 
+## $means
+##   sales      std r        se Min Max  Q25 Q50  Q75
+## 1   8.5 2.121320 2 0.5773503   7  10 7.75 8.5 9.25
+## 2   5.5 3.535534 2 0.5773503   3   8 4.25 5.5 6.75
+## 3   2.5 2.121320 2 0.5773503   1   4 1.75 2.5 3.25
+## 
+## $comparison
+## NULL
+## 
+## $groups
+##   sales groups
+## 1   8.5      a
+## 2   5.5     ab
+## 3   2.5      b
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;group&quot;</code></pre>
+<p><br> <br></p>
+</div>
+</div>
+</div>
+<div id="이원분산분석-주효과와-상호작용효과" class="section level2">
+<h2>3. 이원분산분석 : 주효과와 상호작용효과</h2>
+<p><br></p>
+<div id="창고1-1" class="section level4">
+<h4>1. 창고1</h4>
+<pre class="r"><code>store.inter &lt;- read.csv(&quot;https://www.dropbox.com/s/wnnrtgyt6oqhoti/store_interaction.csv?dl=1&quot;, header=F, col.names=c(&quot;size&quot;,&quot;loc&quot;,&quot;sales&quot;))
+lm.store.inter &lt;- lm(sales ~ factor(size)*factor(loc), data=store.inter)
+anova(lm.store.inter)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: sales
+##                          Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+## factor(size)              2 354.83 177.415  83.360 &lt; 2.2e-16 ***
+## factor(loc)               1 250.92 250.919 117.897 3.424e-15 ***
+## factor(size):factor(loc)  2 144.92  72.461  34.047 2.716e-10 ***
+## Residuals                54 114.93   2.128                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><br></p>
+</div>
+<div id="창고2-1" class="section level4">
+<h4>2. 창고2</h4>
+<pre class="r"><code>aov.store.inter &lt;- aov(sales ~ factor(size)*factor(loc), data=store.inter)
+summary(aov.store.inter)</code></pre>
+<pre><code>##                          Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## factor(size)              2  354.8  177.41   83.36  &lt; 2e-16 ***
+## factor(loc)               1  250.9  250.92  117.90 3.42e-15 ***
+## factor(size):factor(loc)  2  144.9   72.46   34.05 2.72e-10 ***
+## Residuals                54  114.9    2.13                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><br></p>
+</div>
+<div id="사후분석-2" class="section level4">
+<h4>3. 사후분석</h4>
+<div id="lsd-2" class="section level5">
+<h5>3-1. LSD</h5>
+<pre class="r"><code>(LSD.test(aov.store.inter, &quot;factor(size)&quot;))</code></pre>
+<pre><code>## $statistics
+##    MSerror Df Mean       CV
+##   2.128297 54  7.8 18.70344
+## 
+## $parameters
+##         test p.ajusted       name.t ntr alpha
+##   Fisher-LSD      none factor(size)   3  0.05
+## 
+## $means
+##       sales      std  r        se       LCL       UCL Min Max Q25  Q50   Q75
+## 1 10.863636 4.517642 22 0.3110318 10.240055 11.487218   5  18   7 11.5 14.75
+## 2  6.809524 1.569046 21 0.3183512  6.171268  7.447779   4   9   6  7.0  8.00
+## 3  5.058824 1.434860 17 0.3538275  4.349442  5.768205   2   7   4  5.0  6.00
+## 
+## $comparison
+## NULL
+## 
+## $groups
+##       sales groups
+## 1 10.863636      a
+## 2  6.809524      b
+## 3  5.058824      c
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;group&quot;</code></pre>
+</div>
+<div id="scheffe-2" class="section level5">
+<h5>3-2. Scheffe</h5>
+<pre class="r"><code>(scheffe.test(aov.store.inter, &quot;factor(size)&quot;))</code></pre>
+<pre><code>## $statistics
+##    MSerror Df        F Mean       CV
+##   2.128297 54 3.168246  7.8 18.70344
+## 
+## $parameters
+##      test       name.t ntr alpha
+##   Scheffe factor(size)   3  0.05
+## 
+## $means
+##       sales      std  r        se Min Max Q25  Q50   Q75
+## 1 10.863636 4.517642 22 0.3110318   5  18   7 11.5 14.75
+## 2  6.809524 1.569046 21 0.3183512   4   9   6  7.0  8.00
+## 3  5.058824 1.434860 17 0.3538275   2   7   4  5.0  6.00
+## 
+## $comparison
+## NULL
+## 
+## $groups
+##       sales groups
+## 1 10.863636      a
+## 2  6.809524      b
+## 3  5.058824      c
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;group&quot;</code></pre>
+</div>
+<div id="duncan-2" class="section level5">
+<h5>3-3. Duncan</h5>
+<pre class="r"><code>(duncan.test(aov.store.inter, &quot;factor(size)&quot;))</code></pre>
+<pre><code>## $statistics
+##    MSerror Df Mean       CV
+##   2.128297 54  7.8 18.70344
+## 
+## $parameters
+##     test       name.t ntr alpha
+##   Duncan factor(size)   3  0.05
+## 
+## $duncan
+## NULL
+## 
+## $means
+##       sales      std  r        se Min Max Q25  Q50   Q75
+## 1 10.863636 4.517642 22 0.3110318   5  18   7 11.5 14.75
+## 2  6.809524 1.569046 21 0.3183512   4   9   6  7.0  8.00
+## 3  5.058824 1.434860 17 0.3538275   2   7   4  5.0  6.00
+## 
+## $comparison
+## NULL
+## 
+## $groups
+##       sales groups
+## 1 10.863636      a
+## 2  6.809524      b
+## 3  5.058824      c
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;group&quot;</code></pre>
+</div>
 </div>
 </div>
 

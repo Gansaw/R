@@ -18,6 +18,8 @@ number_sections: yes
 ---
 
 <br>
+<br>
+
 
 
 ## 교차분석
@@ -41,10 +43,14 @@ pval <- pchisq(chisq, df=(ni-1)*(nj-1), lower.tail=F)
 chisq ; pval
 ```
 
+<br>
+
 #### 2. 직무만족도2
 ```{R}
 chisq.test(tab)
 ```
+
+<br>
 
 #### 3. 여론조사
 ```{r}
@@ -54,4 +60,3 @@ colnames(tab) <- c("남편A","남편B","남편C")
 rownames(tab) <- c("아내A","아내B","아내C")
 chisq.test(tab)
 ```
-

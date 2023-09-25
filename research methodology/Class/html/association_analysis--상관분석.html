@@ -12,7 +12,7 @@
 <meta name="author" content="최호진(gansaw12@gmail.com)" />
 
 
-<title>Hyphthesis Testing - Single Population</title>
+<title>Association Analysis - Correlation Analysis</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -349,7 +349,8 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Hyphthesis Testing - Single Population</h1>
+<h1 class="title toc-ignore">Association Analysis - Correlation
+Analysis</h1>
 <h4 class="author">최호진(<a href="mailto:gansaw12@gmail.com" class="email">gansaw12@gmail.com</a>)</h4>
 <h4 class="date">2023.09.25(월)</h4>
 
@@ -359,109 +360,115 @@ display: none;
 true
 </div>
 
+<p><br> <br></p>
+<div id="피어슨-상관분석" class="section level2">
+<h2>1. 피어슨 상관분석</h2>
 <p><br></p>
-<div id="예제-1-슈퍼-건건지-수명" class="section level2">
-<h2>예제 1 : 슈퍼 건건지 수명</h2>
-<p>S전자는 지사가 생산하는 슈퍼 건전지의 평균 수명이 1500분이라고
-주장하고 있다 그러나 이를 사용해본 소비자들은 1500분이 되지 않는다고
-불평하여 이를 소비자 보호원에서 밝혀줄 것을 호소하였다. 이에 따라
-소비자보호원에서는 100개의 건전지를 표본으로 뽑아 조사를 실시하였다.
-조사 결과 표본 100개의 평균 수명은 1,420분이고 표본의 표준편차는
-200분이었다. 소비자의 주장을 유의수준(a) 0.05에서 검정하시오.</p>
-<pre class="r"><code>n &lt;- 100; xbar &lt;- 1420; sigma &lt;- 200; mu &lt;- 1500
-t0 &lt;- (xbar-mu)/(sigma/sqrt(n))
-pt(t0, df=n-1)      # p-value 값</code></pre>
-<pre><code>## [1] 6.112576e-05</code></pre>
-<p>=&gt; p-value값이 유의수준 0.5보다 작으므로 귀무가설 기각(연구가설
-채택)</p>
+<div id="키와-몸무게" class="section level4">
+<h4>키와 몸무게</h4>
+<pre class="r"><code>height &lt;- c(176, 172, 182, 160, 163, 165, 168, 163, 182, 148, 170, 166, 172, 160, 163, 170, 182, 174, 164, 160, 178, 175, 173, 188, 180, 170, 168, 166, 170, 182)
+weight &lt;- c(72, 72, 70, 43, 48, 54, 51, 52, 73, 45, 60, 62, 64, 47, 51, 74, 88, 64, 56, 56, 62, 70, 73, 82, 75, 65, 56, 65, 54, 77)
+
+png(&quot;plot/pearson_corr.png&quot;, height=6, width=10, units=&quot;in&quot;, res=300)
+plot(height, weight)
+cor.test(height, weight)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  height and weight
+## t = 8.7863, df = 28, p-value = 1.544e-09
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.7179513 0.9299195
+## sample estimates:
+##       cor 
+## 0.8566445</code></pre>
+<p><br> <br></p>
+</div>
+</div>
+<div id="편상관분석" class="section level2">
+<h2>2. 편상관분석</h2>
+<p><br></p>
+<div id="마케팅과-시장성과1" class="section level4">
+<h4>1. 마케팅과 시장성과1</h4>
+<pre class="r"><code>partial &lt;- read.csv(&quot;data/partial.csv&quot;, header=T)
+png(&quot;plot/partial_corr.png&quot;, height=6, width=10, units=&quot;in&quot;, res=300)
+plot(partial$Marketing, partial$Performance)
+cor.test(partial$Marketing, partial$Performance)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  partial$Marketing and partial$Performance
+## t = 5.372, df = 48, p-value = 2.247e-06
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.4031790 0.7612661
+## sample estimates:
+##       cor 
+## 0.6127603</code></pre>
 <p><br></p>
 </div>
-<div id="예제-2-통조림-무게" class="section level2">
-<h2>예제 2 : 통조림 무게</h2>
-<ul>
-<li>귀무가설(H0) : 통조림의 무게는 300g이 아니다.</li>
-<li>연구가설(H1) : 통조림의 무게는 300g이다.</li>
-</ul>
-<div id="검정통계량표본평균이-294g이고-표본분산이-400g이라고-주어진-경우" class="section level3">
-<h3>1. 검정통계량(표본평균)이 294g이고 표본분산이 400g이라고 주어진
-경우</h3>
-<pre class="r"><code>n &lt;- 100; xbar &lt;- 294; sigma &lt;- sqrt(400); mu &lt;- 300
-t0 &lt;- (xbar-mu)/(sigma/sqrt(n))
-pt(t0, df=n-1) + pt(-t0, df=n-1, lower.tail=F)      # p-value 값</code></pre>
-<pre><code>## [1] 0.003415508</code></pre>
-<pre class="r"><code>2*pt(t0, df=n-1)      # p-value 값</code></pre>
-<pre><code>## [1] 0.003415508</code></pre>
+<div id="마케팅과-시장성과2" class="section level4">
+<h4>1. 마케팅과 시장성과2</h4>
+<pre class="r"><code>rxy &lt;- cor(partial$Marketing, partial$Performance)
+rxz &lt;- cor(partial$Marketing, partial$Market_growth)
+ryz &lt;- cor(partial$Performance, partial$Market_growth)
+(rxy.z &lt;- (rxy-rxz*ryz)/(sqrt(1-rxz^2)*sqrt(1-ryz^2)))</code></pre>
+<pre><code>## [1] 0.4656057</code></pre>
+<p><br></p>
 </div>
-<div id="통조림-무게-표본이-주어진-경우" class="section level3">
-<h3>2. 통조림 무게 표본이 주어진 경우</h3>
-<pre class="r"><code>x &lt;- c(319, 242, 291, 276, 348, 299, 293, 304, 296, 286, 301, 324, 279, 323, 296, 271, 283, 302, 321, 322, 307, 300, 261, 274, 311, 320, 290, 269, 326, 287, 292, 294, 314, 303, 290, 292, 308, 308, 282, 285, 301, 327, 323, 320, 301, 288, 293, 310, 301, 303, 291, 304, 244, 305, 285, 316, 278, 290, 283, 261, 320, 293, 307, 307, 260, 318, 293, 309, 308, 306, 283, 300, 263, 311, 286, 272, 313, 312, 286, 282, 309, 284, 321, 251, 319, 311, 271, 295, 280, 293, 320, 256, 318, 281, 271, 283, 277, 289, 266, 309) </code></pre>
-<p>t.test를 통해 가설검정을 진행한다.</p>
-<div id="통조림-무게가-300g이라는-주장" class="section level4">
-<h4>2-1. 통조림 무게가 300g이라는 주장</h4>
-<pre class="r"><code>t.test(x, mu=300)</code></pre>
+<div id="마케팅과-시장성과3" class="section level4">
+<h4>1. 마케팅과 시장성과3</h4>
+<pre class="r"><code>xres &lt;- residuals(lm(partial$Marketing~partial$Market_growth))
+yres &lt;- residuals(lm(partial$Performance~partial$Market_growth))
+cor.test(xres, yres)</code></pre>
 <pre><code>## 
-##  One Sample t-test
+##  Pearson&#39;s product-moment correlation
 ## 
-## data:  x
-## t = -2.2658, df = 99, p-value = 0.02564
-## alternative hypothesis: true mean is not equal to 300
+## data:  xres and yres
+## t = 3.645, df = 48, p-value = 0.000656
+## alternative hypothesis: true correlation is not equal to 0
 ## 95 percent confidence interval:
-##  291.4842 299.4358
+##  0.2151402 0.6585988
 ## sample estimates:
-## mean of x 
-##    295.46</code></pre>
+##       cor 
+## 0.4656057</code></pre>
+<p><br> <br></p>
 </div>
-<div id="통조림-무게가-300g보다-작다는-주장" class="section level4">
-<h4>2-2. 통조림 무게가 300g보다 작다는 주장</h4>
-<pre class="r"><code>t.test(x, mu=300, alt=&quot;less&quot;)</code></pre>
+</div>
+<div id="서열상관계수" class="section level2">
+<h2>3. 서열상관계수</h2>
+<pre class="r"><code>rank_cor &lt;- read.csv(&quot;data/rank_cor.csv&quot;, header=T)
+png(&quot;plot/rank_corr.png&quot;, height=6, width=10, units=&quot;in&quot;, res=300)
+plot(rank_cor$Preference, rank_cor$Morality)
+plot(rank_cor$Preference, rank_cor$Morality)</code></pre>
+<p><br></p>
+<div id="캔달" class="section level4">
+<h4>1. 캔달</h4>
+<pre class="r"><code>cor.test(rank_cor$Preference, rank_cor$Morality, method=&quot;kendall&quot;)</code></pre>
 <pre><code>## 
-##  One Sample t-test
+##  Kendall&#39;s rank correlation tau
 ## 
-## data:  x
-## t = -2.2658, df = 99, p-value = 0.01282
-## alternative hypothesis: true mean is less than 300
-## 95 percent confidence interval:
-##      -Inf 298.7869
+## data:  rank_cor$Preference and rank_cor$Morality
+## T = 37, p-value = 0.009148
+## alternative hypothesis: true tau is not equal to 0
 ## sample estimates:
-## mean of x 
-##    295.46</code></pre>
+##       tau 
+## 0.6444444</code></pre>
+<p><br></p>
 </div>
-</div>
-<div id="read.csv로-읽어오는-경우" class="section level3">
-<h3>3. read.csv로 읽어오는 경우</h3>
-<pre class="r"><code>getwd()   # get currently working directory</code></pre>
-<pre><code>## [1] &quot;C:/Users/user/Desktop/github/R/research methodology/Class&quot;</code></pre>
-<pre class="r"><code>x &lt;- read.csv(&quot;https://www.dropbox.com/s/gvvbp2n45r6wqyh/tuna_can.csv?dl=1&quot;, header=F, col.names = c(&quot;id&quot;, &quot;weight&quot;))</code></pre>
-<div id="통조림-무게가-300g이라는-주장-1" class="section level4">
-<h4>3-1. 통조림 무게가 300g이라는 주장</h4>
-<pre class="r"><code>t.test(x$weight, mu=300)</code></pre>
+<div id="스피어맨" class="section level4">
+<h4>2. 스피어맨</h4>
+<pre class="r"><code>cor.test(rank_cor$Preference, rank_cor$Morality, method=&quot;spearman&quot;)</code></pre>
 <pre><code>## 
-##  One Sample t-test
+##  Spearman&#39;s rank correlation rho
 ## 
-## data:  x$weight
-## t = -2.2658, df = 99, p-value = 0.02564
-## alternative hypothesis: true mean is not equal to 300
-## 95 percent confidence interval:
-##  291.4842 299.4358
+## data:  rank_cor$Preference and rank_cor$Morality
+## S = 36, p-value = 0.01165
+## alternative hypothesis: true rho is not equal to 0
 ## sample estimates:
-## mean of x 
-##    295.46</code></pre>
-</div>
-<div id="통조림-무게가-300g보다-작다는-주장-1" class="section level4">
-<h4>3-2. 통조림 무게가 300g보다 작다는 주장</h4>
-<pre class="r"><code>t.test(x$weight, mu=300, alt=&quot;less&quot;)</code></pre>
-<pre><code>## 
-##  One Sample t-test
-## 
-## data:  x$weight
-## t = -2.2658, df = 99, p-value = 0.01282
-## alternative hypothesis: true mean is less than 300
-## 95 percent confidence interval:
-##      -Inf 298.7869
-## sample estimates:
-## mean of x 
-##    295.46</code></pre>
-</div>
+##       rho 
+## 0.7818182</code></pre>
 </div>
 </div>
 
