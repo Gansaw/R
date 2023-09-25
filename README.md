@@ -18,8 +18,7 @@ Before operating program, you need to accomplish the following step.
 
 ### Library
 + tidyverse
-+ dplyr
-+ ggplot2
++ agricolae
 + random Forest
 + xgboost
 + prophet
