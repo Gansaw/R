@@ -18,7 +18,7 @@ Before operating program, you need to accomplish the following step.
 
 ### Library
 + tidyverse (Required for all)
-+ agricolate (Required for all)
++ agricolae (Required for all)
 + random Forest
 + xgboost
 + prophet
