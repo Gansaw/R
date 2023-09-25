@@ -1,5 +1,5 @@
 ---
-title: "Hyphthesis Testing - Single Population"
+title: "Study 1 - Hyphthesis Testing(Single Population)"
 author: "최호진(gansaw12@gmail.com)"
 date: "2023.09.18(월)"
 output:

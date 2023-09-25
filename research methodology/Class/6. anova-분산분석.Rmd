@@ -1,5 +1,5 @@
 ---
-title: "ANOVA - Analysis of Variance"
+title: "Study 6 - Analysis of Variance(ANOVA)"
 author: "최호진(gansaw12@gmail.com)"
 date: "2023.09.25(월)"
 output:
@@ -45,6 +45,8 @@ summary(aov.restaurant)
 
 #### 3. 사후분석
 
+<br>
+
 ##### 3-1. LSD
 ```{r : LSD}
 library(agricolae, warn.conflicts=F)
@@ -52,10 +54,16 @@ l.test <- LSD.test(aov.restaurant, "factor(name)")
 
 l.test
 ```
+
+<br>
+
 ##### 3-2. Scheffe
 ```{R}
 (scheffe.test(aov.restaurant, "factor(name)"))
 ```
+
+<br>
+
 ##### 3-3. Duncan
 ```{R}
 (duncan.test(aov.restaurant, "factor(name)"))
@@ -87,14 +95,22 @@ summary(aov.store.main)
 
 #### 3. 사후분석
 
+<br>
+
 ##### 3-1. LSD
 ```{R}
 (LSD.test(aov.store.main, "factor(size)"))
 ```
+
+<br>
+
 ##### 3-2. Scheffe
 ```{R}
 (scheffe.test(aov.store.main, "factor(size)"))
 ```
+
+<br>
+
 ##### 3-3. Duncan
 ```{R}
 (duncan.test(aov.store.main, "factor(size)"))
@@ -126,14 +142,22 @@ summary(aov.store.inter)
 
 #### 3. 사후분석
 
+<br>
+
 ##### 3-1. LSD
 ```{R}
 (LSD.test(aov.store.inter, "factor(size)"))
 ```
+
+<br>
+
 ##### 3-2. Scheffe
 ```{R}
 (scheffe.test(aov.store.inter, "factor(size)"))
 ```
+
+<br>
+
 ##### 3-3. Duncan
 ```{R}
 (duncan.test(aov.store.inter, "factor(size)"))

@@ -1,0 +1,75 @@
+---
+title: "Study 7 - Regression Analysis"
+author: "최호진(gansaw12@gmail.com)"
+date: "2023.09.25(월)"
+output:
+  html_document:
+  toc: yes
+df_print: paged
+word_document:
+  toc: yes
+pdf_document:
+  extra_dependencies: kotex
+fig_height: 6
+fig_width: 10
+toc: yes
+fig_caption: yes
+number_sections: yes
+---
+
+<br>
+<br>
+
+
+
+
+## 단순회귀분석
+
+<br>
+
+#### 키와 몸무게
+```{R}
+reg <- read.csv("https://www.dropbox.com/s/rmjklxf88q6tboo/regression.csv?dl=1", header=F, col.names=c("id", "키", "몸무게", "허리둘레"))
+lm.reg <- lm(키 ~ 몸무게, data=reg)
+
+summary(lm.reg) ; anova(lm.reg)
+```
+
+```{R}
+fitted(lm.reg)
+```
+
+<br>
+<br>
+
+## 다중회귀분석
+
+<br>
+
+#### 키와 몸무게
+```{R}
+lm.reg <- lm(키 ~ 몸무게+허리둘레, data=reg)
+
+summary(lm.reg) ; anova(lm.reg)
+```
+
+```{R}
+step.reg <- step(lm.reg, direction="both")
+summary(step.reg)
+```
+
+<br>
+<br>
+
+## 더미변수를 이용한 회귀분석
+
+<br> 
+
+#### Dummy
+```{R}
+reg.dummy <- read.csv("https://www.dropbox.com/s/uy81kck2vlgv4va/regression_dummy.csv?dl=1", header=F, col.names=c("id","성별","키","몸무게"))
+lm.reg.dummy <- lm(키 ~ factor(성별)+몸무게, data=reg.dummy)
+
+summary(lm.reg.dummy)
+```
+

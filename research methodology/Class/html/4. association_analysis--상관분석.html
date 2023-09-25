@@ -12,7 +12,7 @@
 <meta name="author" content="최호진(gansaw12@gmail.com)" />
 
 
-<title>ANOVA - Analysis of Variance</title>
+<title>Study 4 - Association Analysis(Correlation Analysis)</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -349,7 +349,8 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">ANOVA - Analysis of Variance</h1>
+<h1 class="title toc-ignore">Study 4 - Association Analysis(Correlation
+Analysis)</h1>
 <h4 class="author">최호진(<a href="mailto:gansaw12@gmail.com" class="email">gansaw12@gmail.com</a>)</h4>
 <h4 class="date">2023.09.25(월)</h4>
 
@@ -360,393 +361,114 @@ true
 </div>
 
 <p><br> <br></p>
-<div id="일원분산분석" class="section level2">
-<h2>1. 일원분산분석</h2>
+<div id="피어슨-상관분석" class="section level2">
+<h2>1. 피어슨 상관분석</h2>
 <p><br></p>
-<div id="식당1" class="section level4">
-<h4>1. 식당1</h4>
-<pre class="r"><code>restaurant &lt;- read.csv(&quot;https://www.dropbox.com/s/fbyroeo28wgn1pz/restaurant.csv?dl=1&quot;, header=F, col.names=c(&quot;id&quot;, &quot;name&quot;, &quot;score&quot;))
-lm.restaurant &lt;- lm(score ~ factor(name), data=restaurant)
-anova(lm.restaurant)</code></pre>
-<pre><code>## Analysis of Variance Table
-## 
-## Response: score
-##               Df  Sum Sq Mean Sq F value   Pr(&gt;F)   
-## factor(name)   3   9.214 3.07147  3.9636 0.009579 **
-## Residuals    135 104.613 0.77491                    
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p><br></p>
-</div>
-<div id="식당2" class="section level4">
-<h4>2. 식당2</h4>
-<pre class="r"><code># if name is not a factor type, it will produce wrong results (see the df)
-aov.restaurant &lt;- aov(score ~ factor(name), data=restaurant)
-summary(aov.restaurant)</code></pre>
-<pre><code>##               Df Sum Sq Mean Sq F value  Pr(&gt;F)   
-## factor(name)   3   9.21  3.0715   3.964 0.00958 **
-## Residuals    135 104.61  0.7749                   
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p><br></p>
-</div>
-<div id="사후분석" class="section level4">
-<h4>3. 사후분석</h4>
-<div id="lsd" class="section level5">
-<h5>3-1. LSD</h5>
-<pre class="r"><code>library(agricolae, warn.conflicts=F)
-l.test &lt;- LSD.test(aov.restaurant, &quot;factor(name)&quot;)
+<div id="키와-몸무게" class="section level4">
+<h4>키와 몸무게</h4>
+<pre class="r"><code>height &lt;- c(176, 172, 182, 160, 163, 165, 168, 163, 182, 148, 170, 166, 172, 160, 163, 170, 182, 174, 164, 160, 178, 175, 173, 188, 180, 170, 168, 166, 170, 182)
+weight &lt;- c(72, 72, 70, 43, 48, 54, 51, 52, 73, 45, 60, 62, 64, 47, 51, 74, 88, 64, 56, 56, 62, 70, 73, 82, 75, 65, 56, 65, 54, 77)
 
-l.test</code></pre>
-<pre><code>## $statistics
-##     MSerror  Df     Mean       CV
-##   0.7749105 135 4.151079 21.20629
+png(&quot;plot/pearson_corr.png&quot;, height=6, width=10, units=&quot;in&quot;, res=300)
+plot(height, weight)
+cor.test(height, weight)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
 ## 
-## $parameters
-##         test p.ajusted       name.t ntr alpha
-##   Fisher-LSD      none factor(name)   4  0.05
-## 
-## $means
-##      score       std  r        se      LCL      UCL Min Max Q25 Q50  Q75
-## 1 4.394737 0.7547856 38 0.1428019 4.112319 4.677155   2   5   4   5 5.00
-## 2 4.312500 0.6927039 32 0.1556148 4.004742 4.620258   3   5   4   4 5.00
-## 3 3.700000 1.0875471 30 0.1607182 3.382149 4.017851   1   5   3   4 4.75
-## 4 4.128205 0.9508857 39 0.1409592 3.849431 4.406979   1   5   4   4 5.00
-## 
-## $comparison
-## NULL
-## 
-## $groups
-##      score groups
-## 1 4.394737      a
-## 2 4.312500      a
-## 4 4.128205      a
-## 3 3.700000      b
-## 
-## attr(,&quot;class&quot;)
-## [1] &quot;group&quot;</code></pre>
-</div>
-<div id="scheffe" class="section level5">
-<h5>3-2. Scheffe</h5>
-<pre class="r"><code>(scheffe.test(aov.restaurant, &quot;factor(name)&quot;))</code></pre>
-<pre><code>## $statistics
-##     MSerror  Df        F     Mean       CV
-##   0.7749105 135 2.671676 4.151079 21.20629
-## 
-## $parameters
-##      test       name.t ntr alpha
-##   Scheffe factor(name)   4  0.05
-## 
-## $means
-##      score       std  r        se Min Max Q25 Q50  Q75
-## 1 4.394737 0.7547856 38 0.1428019   2   5   4   5 5.00
-## 2 4.312500 0.6927039 32 0.1556148   3   5   4   4 5.00
-## 3 3.700000 1.0875471 30 0.1607182   1   5   3   4 4.75
-## 4 4.128205 0.9508857 39 0.1409592   1   5   4   4 5.00
-## 
-## $comparison
-## NULL
-## 
-## $groups
-##      score groups
-## 1 4.394737      a
-## 2 4.312500     ab
-## 4 4.128205     ab
-## 3 3.700000      b
-## 
-## attr(,&quot;class&quot;)
-## [1] &quot;group&quot;</code></pre>
-</div>
-<div id="duncan" class="section level5">
-<h5>3-3. Duncan</h5>
-<pre class="r"><code>(duncan.test(aov.restaurant, &quot;factor(name)&quot;))</code></pre>
-<pre><code>## $statistics
-##     MSerror  Df     Mean       CV
-##   0.7749105 135 4.151079 21.20629
-## 
-## $parameters
-##     test       name.t ntr alpha
-##   Duncan factor(name)   4  0.05
-## 
-## $duncan
-## NULL
-## 
-## $means
-##      score       std  r        se Min Max Q25 Q50  Q75
-## 1 4.394737 0.7547856 38 0.1428019   2   5   4   5 5.00
-## 2 4.312500 0.6927039 32 0.1556148   3   5   4   4 5.00
-## 3 3.700000 1.0875471 30 0.1607182   1   5   3   4 4.75
-## 4 4.128205 0.9508857 39 0.1409592   1   5   4   4 5.00
-## 
-## $comparison
-## NULL
-## 
-## $groups
-##      score groups
-## 1 4.394737      a
-## 2 4.312500      a
-## 4 4.128205      a
-## 3 3.700000      b
-## 
-## attr(,&quot;class&quot;)
-## [1] &quot;group&quot;</code></pre>
+## data:  height and weight
+## t = 8.7863, df = 28, p-value = 1.544e-09
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.7179513 0.9299195
+## sample estimates:
+##       cor 
+## 0.8566445</code></pre>
 <p><br> <br></p>
 </div>
 </div>
-</div>
-<div id="이원분산분석-주효과" class="section level2">
-<h2>2. 이원분산분석 : 주효과</h2>
+<div id="편상관분석" class="section level2">
+<h2>2. 편상관분석</h2>
 <p><br></p>
-<div id="창고1" class="section level4">
-<h4>1. 창고1</h4>
-<pre class="r"><code>store.main &lt;- read.csv(&quot;https://www.dropbox.com/s/oo0rrzhvmk3rmvm/store_main.csv?dl=1&quot;, header=F, col.names=c(&quot;size&quot;,&quot;loc&quot;,&quot;sales&quot;))
-lm.store.main &lt;- lm(sales ~ factor(size)+factor(loc), data=store.main)
-anova(lm.store.main)</code></pre>
-<pre><code>## Analysis of Variance Table
+<div id="마케팅과-시장성과1" class="section level4">
+<h4>1. 마케팅과 시장성과1</h4>
+<pre class="r"><code>partial &lt;- read.csv(&quot;data/partial.csv&quot;, header=T)
+png(&quot;plot/partial_corr.png&quot;, height=6, width=10, units=&quot;in&quot;, res=300)
+plot(partial$Marketing, partial$Performance)
+cor.test(partial$Marketing, partial$Performance)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
 ## 
-## Response: sales
-##              Df Sum Sq Mean Sq F value  Pr(&gt;F)  
-## factor(size)  2 36.000 18.0000   27.00 0.03571 *
-## factor(loc)   1 20.167 20.1667   30.25 0.03150 *
-## Residuals     2  1.333  0.6667                  
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p><br></p>
-</div>
-<div id="창고2" class="section level4">
-<h4>2. 창고2</h4>
-<pre class="r"><code>aov.store.main &lt;- aov(sales ~ factor(size)+factor(loc), data=store.main)
-summary(aov.store.main)</code></pre>
-<pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)  
-## factor(size)  2  36.00  18.000   27.00 0.0357 *
-## factor(loc)   1  20.17  20.167   30.25 0.0315 *
-## Residuals     2   1.33   0.667                 
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+## data:  partial$Marketing and partial$Performance
+## t = 5.372, df = 48, p-value = 2.247e-06
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.4031790 0.7612661
+## sample estimates:
+##       cor 
+## 0.6127603</code></pre>
 <p><br></p>
 </div>
-<div id="사후분석-1" class="section level4">
-<h4>3. 사후분석</h4>
-<div id="lsd-1" class="section level5">
-<h5>3-1. LSD</h5>
-<pre class="r"><code>(LSD.test(aov.store.main, &quot;factor(size)&quot;))</code></pre>
-<pre><code>## $statistics
-##     MSerror Df Mean       CV  t.value      LSD
-##   0.6666667  2  5.5 14.84539 4.302653 3.513101
-## 
-## $parameters
-##         test p.ajusted       name.t ntr alpha
-##   Fisher-LSD      none factor(size)   3  0.05
-## 
-## $means
-##   sales      std r        se        LCL       UCL Min Max  Q25 Q50  Q75
-## 1   8.5 2.121320 2 0.5773503 6.01586229 10.984138   7  10 7.75 8.5 9.25
-## 2   5.5 3.535534 2 0.5773503 3.01586229  7.984138   3   8 4.25 5.5 6.75
-## 3   2.5 2.121320 2 0.5773503 0.01586229  4.984138   1   4 1.75 2.5 3.25
-## 
-## $comparison
-## NULL
-## 
-## $groups
-##   sales groups
-## 1   8.5      a
-## 2   5.5     ab
-## 3   2.5      b
-## 
-## attr(,&quot;class&quot;)
-## [1] &quot;group&quot;</code></pre>
+<div id="마케팅과-시장성과2" class="section level4">
+<h4>1. 마케팅과 시장성과2</h4>
+<pre class="r"><code>rxy &lt;- cor(partial$Marketing, partial$Performance)
+rxz &lt;- cor(partial$Marketing, partial$Market_growth)
+ryz &lt;- cor(partial$Performance, partial$Market_growth)
+(rxy.z &lt;- (rxy-rxz*ryz)/(sqrt(1-rxz^2)*sqrt(1-ryz^2)))</code></pre>
+<pre><code>## [1] 0.4656057</code></pre>
+<p><br></p>
 </div>
-<div id="scheffe-1" class="section level5">
-<h5>3-2. Scheffe</h5>
-<pre class="r"><code>(scheffe.test(aov.store.main, &quot;factor(size)&quot;))</code></pre>
-<pre><code>## $statistics
-##     MSerror Df  F Mean       CV  Scheffe CriticalDifference
-##   0.6666667  2 19  5.5 14.84539 6.164414           5.033223
+<div id="마케팅과-시장성과3" class="section level4">
+<h4>1. 마케팅과 시장성과3</h4>
+<pre class="r"><code>xres &lt;- residuals(lm(partial$Marketing~partial$Market_growth))
+yres &lt;- residuals(lm(partial$Performance~partial$Market_growth))
+cor.test(xres, yres)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
 ## 
-## $parameters
-##      test       name.t ntr alpha
-##   Scheffe factor(size)   3  0.05
-## 
-## $means
-##   sales      std r        se Min Max  Q25 Q50  Q75
-## 1   8.5 2.121320 2 0.5773503   7  10 7.75 8.5 9.25
-## 2   5.5 3.535534 2 0.5773503   3   8 4.25 5.5 6.75
-## 3   2.5 2.121320 2 0.5773503   1   4 1.75 2.5 3.25
-## 
-## $comparison
-## NULL
-## 
-## $groups
-##   sales groups
-## 1   8.5      a
-## 2   5.5     ab
-## 3   2.5      b
-## 
-## attr(,&quot;class&quot;)
-## [1] &quot;group&quot;</code></pre>
-</div>
-<div id="duncan-1" class="section level5">
-<h5>3-3. Duncan</h5>
-<pre class="r"><code>(duncan.test(aov.store.main, &quot;factor(size)&quot;))</code></pre>
-<pre><code>## $statistics
-##     MSerror Df Mean       CV
-##   0.6666667  2  5.5 14.84539
-## 
-## $parameters
-##     test       name.t ntr alpha
-##   Duncan factor(size)   3  0.05
-## 
-## $duncan
-##      Table CriticalRange
-## 2 6.079637      3.510080
-## 3 5.813787      3.356592
-## 
-## $means
-##   sales      std r        se Min Max  Q25 Q50  Q75
-## 1   8.5 2.121320 2 0.5773503   7  10 7.75 8.5 9.25
-## 2   5.5 3.535534 2 0.5773503   3   8 4.25 5.5 6.75
-## 3   2.5 2.121320 2 0.5773503   1   4 1.75 2.5 3.25
-## 
-## $comparison
-## NULL
-## 
-## $groups
-##   sales groups
-## 1   8.5      a
-## 2   5.5     ab
-## 3   2.5      b
-## 
-## attr(,&quot;class&quot;)
-## [1] &quot;group&quot;</code></pre>
+## data:  xres and yres
+## t = 3.645, df = 48, p-value = 0.000656
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  0.2151402 0.6585988
+## sample estimates:
+##       cor 
+## 0.4656057</code></pre>
 <p><br> <br></p>
 </div>
 </div>
-</div>
-<div id="이원분산분석-주효과와-상호작용효과" class="section level2">
-<h2>3. 이원분산분석 : 주효과와 상호작용효과</h2>
+<div id="서열상관계수" class="section level2">
+<h2>3. 서열상관계수</h2>
+<pre class="r"><code>rank_cor &lt;- read.csv(&quot;data/rank_cor.csv&quot;, header=T)
+png(&quot;plot/rank_corr.png&quot;, height=6, width=10, units=&quot;in&quot;, res=300)
+plot(rank_cor$Preference, rank_cor$Morality)
+plot(rank_cor$Preference, rank_cor$Morality)</code></pre>
 <p><br></p>
-<div id="창고1-1" class="section level4">
-<h4>1. 창고1</h4>
-<pre class="r"><code>store.inter &lt;- read.csv(&quot;https://www.dropbox.com/s/wnnrtgyt6oqhoti/store_interaction.csv?dl=1&quot;, header=F, col.names=c(&quot;size&quot;,&quot;loc&quot;,&quot;sales&quot;))
-lm.store.inter &lt;- lm(sales ~ factor(size)*factor(loc), data=store.inter)
-anova(lm.store.inter)</code></pre>
-<pre><code>## Analysis of Variance Table
+<div id="캔달" class="section level4">
+<h4>1. 캔달</h4>
+<pre class="r"><code>cor.test(rank_cor$Preference, rank_cor$Morality, method=&quot;kendall&quot;)</code></pre>
+<pre><code>## 
+##  Kendall&#39;s rank correlation tau
 ## 
-## Response: sales
-##                          Df Sum Sq Mean Sq F value    Pr(&gt;F)    
-## factor(size)              2 354.83 177.415  83.360 &lt; 2.2e-16 ***
-## factor(loc)               1 250.92 250.919 117.897 3.424e-15 ***
-## factor(size):factor(loc)  2 144.92  72.461  34.047 2.716e-10 ***
-## Residuals                54 114.93   2.128                      
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p><br></p>
-</div>
-<div id="창고2-1" class="section level4">
-<h4>2. 창고2</h4>
-<pre class="r"><code>aov.store.inter &lt;- aov(sales ~ factor(size)*factor(loc), data=store.inter)
-summary(aov.store.inter)</code></pre>
-<pre><code>##                          Df Sum Sq Mean Sq F value   Pr(&gt;F)    
-## factor(size)              2  354.8  177.41   83.36  &lt; 2e-16 ***
-## factor(loc)               1  250.9  250.92  117.90 3.42e-15 ***
-## factor(size):factor(loc)  2  144.9   72.46   34.05 2.72e-10 ***
-## Residuals                54  114.9    2.13                     
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+## data:  rank_cor$Preference and rank_cor$Morality
+## T = 37, p-value = 0.009148
+## alternative hypothesis: true tau is not equal to 0
+## sample estimates:
+##       tau 
+## 0.6444444</code></pre>
 <p><br></p>
 </div>
-<div id="사후분석-2" class="section level4">
-<h4>3. 사후분석</h4>
-<div id="lsd-2" class="section level5">
-<h5>3-1. LSD</h5>
-<pre class="r"><code>(LSD.test(aov.store.inter, &quot;factor(size)&quot;))</code></pre>
-<pre><code>## $statistics
-##    MSerror Df Mean       CV
-##   2.128297 54  7.8 18.70344
+<div id="스피어맨" class="section level4">
+<h4>2. 스피어맨</h4>
+<pre class="r"><code>cor.test(rank_cor$Preference, rank_cor$Morality, method=&quot;spearman&quot;)</code></pre>
+<pre><code>## 
+##  Spearman&#39;s rank correlation rho
 ## 
-## $parameters
-##         test p.ajusted       name.t ntr alpha
-##   Fisher-LSD      none factor(size)   3  0.05
-## 
-## $means
-##       sales      std  r        se       LCL       UCL Min Max Q25  Q50   Q75
-## 1 10.863636 4.517642 22 0.3110318 10.240055 11.487218   5  18   7 11.5 14.75
-## 2  6.809524 1.569046 21 0.3183512  6.171268  7.447779   4   9   6  7.0  8.00
-## 3  5.058824 1.434860 17 0.3538275  4.349442  5.768205   2   7   4  5.0  6.00
-## 
-## $comparison
-## NULL
-## 
-## $groups
-##       sales groups
-## 1 10.863636      a
-## 2  6.809524      b
-## 3  5.058824      c
-## 
-## attr(,&quot;class&quot;)
-## [1] &quot;group&quot;</code></pre>
-</div>
-<div id="scheffe-2" class="section level5">
-<h5>3-2. Scheffe</h5>
-<pre class="r"><code>(scheffe.test(aov.store.inter, &quot;factor(size)&quot;))</code></pre>
-<pre><code>## $statistics
-##    MSerror Df        F Mean       CV
-##   2.128297 54 3.168246  7.8 18.70344
-## 
-## $parameters
-##      test       name.t ntr alpha
-##   Scheffe factor(size)   3  0.05
-## 
-## $means
-##       sales      std  r        se Min Max Q25  Q50   Q75
-## 1 10.863636 4.517642 22 0.3110318   5  18   7 11.5 14.75
-## 2  6.809524 1.569046 21 0.3183512   4   9   6  7.0  8.00
-## 3  5.058824 1.434860 17 0.3538275   2   7   4  5.0  6.00
-## 
-## $comparison
-## NULL
-## 
-## $groups
-##       sales groups
-## 1 10.863636      a
-## 2  6.809524      b
-## 3  5.058824      c
-## 
-## attr(,&quot;class&quot;)
-## [1] &quot;group&quot;</code></pre>
-</div>
-<div id="duncan-2" class="section level5">
-<h5>3-3. Duncan</h5>
-<pre class="r"><code>(duncan.test(aov.store.inter, &quot;factor(size)&quot;))</code></pre>
-<pre><code>## $statistics
-##    MSerror Df Mean       CV
-##   2.128297 54  7.8 18.70344
-## 
-## $parameters
-##     test       name.t ntr alpha
-##   Duncan factor(size)   3  0.05
-## 
-## $duncan
-## NULL
-## 
-## $means
-##       sales      std  r        se Min Max Q25  Q50   Q75
-## 1 10.863636 4.517642 22 0.3110318   5  18   7 11.5 14.75
-## 2  6.809524 1.569046 21 0.3183512   4   9   6  7.0  8.00
-## 3  5.058824 1.434860 17 0.3538275   2   7   4  5.0  6.00
-## 
-## $comparison
-## NULL
-## 
-## $groups
-##       sales groups
-## 1 10.863636      a
-## 2  6.809524      b
-## 3  5.058824      c
-## 
-## attr(,&quot;class&quot;)
-## [1] &quot;group&quot;</code></pre>
-</div>
+## data:  rank_cor$Preference and rank_cor$Morality
+## S = 36, p-value = 0.01165
+## alternative hypothesis: true rho is not equal to 0
+## sample estimates:
+##       rho 
+## 0.7818182</code></pre>
 </div>
 </div>
 

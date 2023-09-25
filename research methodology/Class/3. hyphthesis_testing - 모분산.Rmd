@@ -1,5 +1,5 @@
 ---
-title: "Hyphthesis Testing - Population Variance"
+title: "Study 3 - Hyphthesis Testing(Population Variance)"
 author: "최호진(gansaw12@gmail.com)"
 date: "2023.09.18(월)"
 output:

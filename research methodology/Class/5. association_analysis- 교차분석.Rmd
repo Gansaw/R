@@ -1,5 +1,5 @@
 ---
-title: "Association Analysis - Cross-Tabulation Analysis"
+title: "Study 5 - Association Analysis(Cross-Tabulation Analysis)"
 author: "최호진(gansaw12@gmail.com)"
 date: "2023.09.25(월)"
 output:
@@ -28,7 +28,7 @@ number_sections: yes
 <br>
 
 #### 1. 직무만족도1
-```{r}
+```{R}
 raw <- read.csv("https://www.dropbox.com/s/xg6z6a7t3ktr646/cross_table_1.csv?dl=1", header=F, col.names=c("학력","직무만족","연령분류","보수","대인관계"))
 tab <- xtabs(~학력+직무만족, data=raw)
 
@@ -53,7 +53,7 @@ chisq.test(tab)
 <br>
 
 #### 3. 여론조사
-```{r}
+```{R}
 정당 <- c(48,29,19,35,59,19,22,15,18)
 tab <- matrix(정당,3,3,byrow=T)
 colnames(tab) <- c("남편A","남편B","남편C")
