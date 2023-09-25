@@ -17,6 +17,10 @@ Before operating program, you need to accomplish the following step.
 + [D2 Coding Font](https://github.com/naver/d2codingfont)
 
 ### Library
+R studio에서 install.packages("") 코드를 이용하여 아래의 라이브러리를 설치해주세요.
+
+Use install.packages("") code to install libraries below while using R studio.
+
 + tidyverse
 + agricolae
 + random Forest
@@ -25,6 +29,7 @@ Before operating program, you need to accomplish the following step.
 + nbClust
 + cluster
 + lubridate
++ fpc
 
 ### License
 이 프로젝트는 MIT 라이선스가 적용되고 있습니다. 세부사항은 LICENSE.md를 참고하세요.
