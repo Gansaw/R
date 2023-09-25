@@ -1,0 +1,57 @@
+---
+title: "Association Analysis - Cross-Tabulation Analysis"
+author: "최호진(gansaw12@gmail.com)"
+date: "2023.09.25(월)"
+output:
+  html_document:
+  toc: yes
+df_print: paged
+word_document:
+  toc: yes
+pdf_document:
+  extra_dependencies: kotex
+fig_height: 6
+fig_width: 10
+toc: yes
+fig_caption: yes
+number_sections: yes
+---
+
+<br>
+
+
+## 교차분석
+카이제곱(chi-square)검정을 사용하여 교차분석을 진행한다.
+
+<br>
+
+#### 1. 직무만족도1
+```{r}
+raw <- read.csv("https://www.dropbox.com/s/xg6z6a7t3ktr646/cross_table_1.csv?dl=1", header=F, col.names=c("학력","직무만족","연령분류","보수","대인관계"))
+tab <- xtabs(~학력+직무만족, data=raw)
+
+sum.i <- apply(tab, 1, sum)
+sum.j <- apply(tab, 2, sum)
+eij <- outer(sum.i, sum.j)/sum(tab)
+
+chisq <- sum((tab-eij)^2/eij)
+ni <- length(sum.i); nj=length(sum.j)
+pval <- pchisq(chisq, df=(ni-1)*(nj-1), lower.tail=F)
+
+chisq ; pval
+```
+
+#### 2. 직무만족도2
+```{R}
+chisq.test(tab)
+```
+
+#### 3. 여론조사
+```{r}
+정당 <- c(48,29,19,35,59,19,22,15,18)
+tab <- matrix(정당,3,3,byrow=T)
+colnames(tab) <- c("남편A","남편B","남편C")
+rownames(tab) <- c("아내A","아내B","아내C")
+chisq.test(tab)
+```
+

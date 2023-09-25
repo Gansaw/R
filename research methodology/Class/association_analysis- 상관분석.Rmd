@@ -1,0 +1,81 @@
+---
+title: "Association Analysis - Correlation Analysis"
+author: "최호진(gansaw12@gmail.com)"
+date: "2023.09.25(월)"
+output:
+  html_document:
+  toc: yes
+df_print: paged
+word_document:
+  toc: yes
+pdf_document:
+  extra_dependencies: kotex
+fig_height: 6
+fig_width: 10
+toc: yes
+fig_caption: yes
+number_sections: yes
+---
+
+<br>
+
+
+## 1. 피어슨 상관분석
+
+#### 키와 몸무게
+```{R}
+height <- c(176, 172, 182, 160, 163, 165, 168, 163, 182, 148, 170, 166, 172, 160, 163, 170, 182, 174, 164, 160, 178, 175, 173, 188, 180, 170, 168, 166, 170, 182)
+weight <- c(72, 72, 70, 43, 48, 54, 51, 52, 73, 45, 60, 62, 64, 47, 51, 74, 88, 64, 56, 56, 62, 70, 73, 82, 75, 65, 56, 65, 54, 77)
+
+png("plot/pearson_corr.png", height=6, width=10, units="in", res=300)
+plot(height, weight)
+cor.test(height, weight)
+```
+
+<br>
+
+## 2. 편상관분석
+
+#### 1. 마케팅과 시장성과1
+```{R}
+partial <- read.csv("data/partial.csv", header=T)
+png("plot/partial_corr.png", height=6, width=10, units="in", res=300)
+plot(partial$Marketing, partial$Performance)
+cor.test(partial$Marketing, partial$Performance)
+```
+
+#### 1. 마케팅과 시장성과2
+```{R}
+rxy <- cor(partial$Marketing, partial$Performance)
+rxz <- cor(partial$Marketing, partial$Market_growth)
+ryz <- cor(partial$Performance, partial$Market_growth)
+(rxy.z <- (rxy-rxz*ryz)/(sqrt(1-rxz^2)*sqrt(1-ryz^2)))
+```
+
+#### 1. 마케팅과 시장성과3
+```{R}
+xres <- residuals(lm(partial$Marketing~partial$Market_growth))
+yres <- residuals(lm(partial$Performance~partial$Market_growth))
+cor.test(xres, yres)
+```
+
+<br>
+
+## 3. 서열상관계수
+
+```{R : 선호도와 도덕성}
+rank_cor <- read.csv("data/rank_cor.csv", header=T)
+png("plot/rank_corr.png", height=6, width=10, units="in", res=300)
+plot(rank_cor$Preference, rank_cor$Morality)
+plot(rank_cor$Preference, rank_cor$Morality)
+```
+
+#### 1. 캔달
+```{R}
+cor.test(rank_cor$Preference, rank_cor$Morality, method="kendall")
+```
+
+#### 2. 스피어맨
+```{R}
+cor.test(rank_cor$Preference, rank_cor$Morality, method="spearman")
+```
