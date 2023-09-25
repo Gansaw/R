@@ -1,0 +1,49 @@
+---
+title: "Study 11 - Cluster Analysis(Density Based Clustering)"
+author: "최호진(gansaw12@gmail.com)"
+date: "2023.09.25(월)"
+output:
+  html_document:
+  toc: yes
+df_print: paged
+word_document:
+  toc: yes
+pdf_document:
+  extra_dependencies: kotex
+fig_height: 6
+fig_width: 10
+toc: yes
+fig_caption: yes
+number_sections: yes
+---
+
+<br>
+<br>
+
+
+## 1. iris 데이터 불러오기
+```{R}
+iris2 <- iris[,-5]                     # iris data
+```
+
+<br>
+
+#### 1. DBSCAN 군집분석
+```{R}
+library(fpc, warn.conflicts=F)
+
+dbs <- dbscan(iris2, eps = 0.42, MinPts = 5)
+ 
+dbs$cluster ; dbs
+```
+
+<br>
+
+#### 2. 시각화
+```{R}
+table(dbs$cluster, iris$Species) # comparison
+
+library(cluster, warn.conflicts=F)		# cluster package 설치 필요
+clusplot(x=iris2, clus=dbs$cluster, color=T, shade=F, labels=2, lines=0) # plotting
+```
+

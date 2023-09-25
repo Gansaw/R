@@ -1,0 +1,86 @@
+---
+title: "Study 8 - Cluster Analysis(Hierarchical Clustering)"
+author: "최호진(gansaw12@gmail.com)"
+date: "2023.09.25(월)"
+output:
+  html_document:
+  toc: yes
+df_print: paged
+word_document:
+  toc: yes
+pdf_document:
+  extra_dependencies: kotex
+fig_height: 6
+fig_width: 10
+toc: yes
+fig_caption: yes
+number_sections: yes
+---
+
+<br>
+<br>
+
+## 1. 거리법
+
+<br>
+
+거리법에는 유클리디언, 맨해튼, 민코우스키, 캔버라, 브레이-커티스 등 다양한 종류가 있다.
+여기에서는 가장 보편적으로 사용되는 유클리디언 거리법을 사용하여 clustering을 진행하였다.
+
+<br>
+
+```{R}
+cluster <- read.csv("https://www.dropbox.com/s/9gdabp5fvuad9vv/cluster.csv?dl=1", header=F, col.names=c("실내시설", "메뉴", "가격", "서비스", "편리성", "인지도", "위생", "숙박", "이용횟수", "레스토랑", "지불비용", "인원", "동반", "형태", "위치", "만족도", "재구매", "성별", "연령", "직업", "최종학력", "소득"))
+
+cluster.scaled <- scale(cluster[1:8])
+d <- dist(cluster.scaled)  		# d <- dist(cluster.scaled, method="euclidean")  
+hc.ward <- hclust(d, method="ward.D2")  
+
+plot(hc.ward, hang=-1)
+```
+
+<br>
+<br>
+
+
+## 2. 연결법
+
+<br>
+
+병합 역시 최단연결법, 최장연결법, 평균연결법, 중심연결법, Ward 등 다양한 종류가 있다.
+마찬가지로 가장 보편적으로 사용되는 Ward를 사용하였고 그 중 D2 기법을 사용하여 clustering을 진행하였다.
+
+<br>
+
+#### 최적 군집 수
+```{R}
+library(NbClust, warn.conflicts=F)
+nc <- NbClust(cluster.scaled, distance="euclidean", min.nc=3, max.nc=15, method="ward.D2")
+```
+
+<br>
+<br>
+
+## 3. Cutree
+```{R}
+clusters <- cutree(hc.ward, k=3)
+
+clusters ; table(clusters)
+```
+
+<br>
+<br>
+
+## 4. 덴드로그램(Dendrogram)
+```{R}
+plot(hc.ward, hang=-1)
+rect.hclust(hc.ward, k=3)
+```
+
+<br>
+
+#### 각 군집의 평균값
+```{r : mean value of each cluster}
+aggregate(cluster, by=list(cluster=clusters), mean)
+aggregate(cluster.scaled, by=list(cluster=clusters), mean)
+```

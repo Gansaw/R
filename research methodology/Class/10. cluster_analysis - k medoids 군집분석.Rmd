@@ -1,0 +1,48 @@
+---
+title: "Study 10 - Cluster Analysis(K Medoids Clustering)"
+author: "최호진(gansaw12@gmail.com)"
+date: "2023.09.25(월)"
+output:
+  html_document:
+  toc: yes
+df_print: paged
+word_document:
+  toc: yes
+pdf_document:
+  extra_dependencies: kotex
+fig_height: 6
+fig_width: 10
+toc: yes
+fig_caption: yes
+number_sections: yes
+---
+
+<br>
+<br>
+
+
+## 1. iris 데이터 불러오기
+```{R}
+library(NbClust)
+library(cluster)
+
+iris2 <- iris[,-5]  # iris data
+# optimal number of clusters
+nc <- NbClust(iris2, distance="euclidean", min.nc=3, max.nc=15, method="ward.D2")
+```
+
+<br>
+
+#### 1. K-medoids 군집분석
+```{R}
+kme <- pam(iris2, k=3) # library(cluster)
+kme$clustering ; kme$clusinfo
+```
+
+<br>
+
+#### 2. 시각화
+```{R}
+table(kme$clustering, iris$Species) # comparison
+clusplot(x=iris2, clus=kme$cluster, color=T, shade=T, labels=2, lines=0) # plotting
+```
