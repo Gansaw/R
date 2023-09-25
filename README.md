@@ -17,8 +17,8 @@ Before operating program, you need to accomplish the following step.
 + [D2 Coding Font](https://github.com/naver/d2codingfont)
 
 ### Library
-+ tidyverse(Required for all)
-+ agricolate(Required for all)
++ tidyverse (Required for all)
++ agricolate (Required for all)
 + random Forest
 + xgboost
 + prophet
