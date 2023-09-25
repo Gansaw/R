@@ -25,6 +25,7 @@ Before operating program, you need to accomplish the following step.
 + nbClust
 + cluster
 + lubridate
++ fpc
 
 ### License
 이 프로젝트는 MIT 라이선스가 적용되고 있습니다. 세부사항은 LICENSE.md를 참고하세요.
