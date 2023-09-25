@@ -12,13 +12,13 @@ Before operating program, you need to accomplish the following step.
 + [R](https://cran.rstudio.com/) (4.3 ver)
 + [R tools](https://cran.r-project.org/bin/windows/Rtools/rtools43/rtools.html) (4.3 ver)
 + [R Studio](https://posit.co/download/rstudio-desktop/) (2023.06 ver)
++ tidyverse
++ agricolate
 
 ### Not required but recommended
 + [D2 Coding Font](https://github.com/naver/d2codingfont)
 
 ### Library
-+ tidyverse
-+ agricolate
 + ggplot2
 + random Forest
 + xgboost
