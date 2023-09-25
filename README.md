@@ -16,7 +16,7 @@ Before operating program, you need to accomplish the following step.
 ### Not required but recommended
 + [D2 Coding Font](https://github.com/naver/d2codingfont)
 
-### Library
+### Library(all needed)
 + tidyverse
 + agricolae
 + random Forest
