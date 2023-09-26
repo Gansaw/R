@@ -16,7 +16,7 @@ Before operating program, you need to accomplish the following step.
 ### Not required but recommended
 + [D2 Coding Font](https://github.com/naver/d2codingfont)
 
-### Library
+### Library/Package
 R studio에서 install.packages("") 코드를 이용하여 아래의 라이브러리를 설치해주세요.
 
 Use install.packages("") code to install libraries below while using R studio.
